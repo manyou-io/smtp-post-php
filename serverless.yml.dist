@@ -1,5 +1,5 @@
 # Read the documentation at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
-service: symfony
+service: smtp-post
 
 provider:
     name: aws
@@ -11,6 +11,14 @@ provider:
     environment:
         # Symfony environment variables
         APP_ENV: prod
+    iam:
+        role:
+            statements:
+                - Effect: Allow
+                  Action:
+                      - ses:SendEmail
+                      - ses:SendRawEmail
+                  Resource: "*"
 
 plugins:
     - ./vendor/bref/bref
@@ -23,7 +31,7 @@ functions:
         layers:
             - ${bref:layer.php-81-fpm}
         events:
-            - httpApi: '*'
+            - httpApi: "*"
     # This function let us run console commands in Lambda
     # console:
     #     handler: bin/console
@@ -35,13 +43,13 @@ functions:
 package:
     patterns:
         # Excluded files and folders for deployment
-        - '!assets/**'
-        - '!node_modules/**'
-        - '!public/build/**'
-        - '!tests/**'
-        - '!var/**'
+        - "!assets/**"
+        - "!node_modules/**"
+        - "!public/build/**"
+        - "!tests/**"
+        - "!var/**"
         # If you want to include files and folders that are part of excluded folders,
         # add them at the end
-        - 'var/cache/prod/**'
-        - 'public/build/entrypoints.json'
-        - 'public/build/manifest.json'
+        - "var/cache/prod/**"
+        - "public/build/entrypoints.json"
+        - "public/build/manifest.json"

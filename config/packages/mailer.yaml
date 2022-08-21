@@ -1,3 +1,3 @@
 framework:
     mailer:
-        dsn: 'ses+https://%env(urlencode:AWS_ACCESS_KEY_ID)%:%env(urlencode:AWS_SECRET_ACCESS_KEY)%@default?region=%env(AWS_REGION)%'
+        dsn: 'ses+https://%env(urlencode:AWS_ACCESS_KEY_ID)%:%env(urlencode:AWS_SECRET_ACCESS_KEY)%@default?region=%env(urlencode:AWS_REGION)%&session_token=%env(urlencode:AWS_SESSION_TOKEN)%'

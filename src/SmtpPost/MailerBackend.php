@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\SmtpPost;
 
 use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
@@ -38,7 +39,11 @@ class MailerBackend implements Backend
             throw new InvalidRequestException('The message data must be a string.');
         }
 
-        $this->mailer->send(new RawMessage($data), $this->createEnvelope($message));
+        try {
+            $this->mailer->send(new RawMessage($data), $this->createEnvelope($message));
+        } catch (TransportExceptionInterface $e) {
+            throw new SendException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     private function createEnvelope(Message $message): Envelope
