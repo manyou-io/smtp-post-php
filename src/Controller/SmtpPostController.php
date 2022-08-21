@@ -17,16 +17,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use function array_map;
 use function explode;
+use function hash_equals;
 
 class SmtpPostController extends AbstractController
 {
-    public function __construct(private Backend $backend, private LoggerInterface $logger)
+    public function __construct(private Backend $backend, private LoggerInterface $logger, private string $apiKey)
     {
     }
 
     #[Route('/', name: 'smtp_post', methods: ['POST'])]
     public function index(Request $request): Response
     {
+        $apiKey = $request->headers->get('x-api-key', '');
+
+        if ($this->apiKey !== '' && ! hash_equals($this->apiKey, $apiKey)) {
+            return new JsonResponse(['error' => 'Invalid API key'], Response::HTTP_UNAUTHORIZED);
+        }
+
         $message = $this->createMessage($request);
 
         try {

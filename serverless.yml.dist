@@ -11,6 +11,7 @@ provider:
     environment:
         # Symfony environment variables
         APP_ENV: prod
+        API_KEY: smtp-post
     iam:
         role:
             statements:
