@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.allowChords": false,
+    "intelephense.environment.includePaths": [
+        "vendor/bin/.phpunit/phpunit/vendor"
+    ]
+}
