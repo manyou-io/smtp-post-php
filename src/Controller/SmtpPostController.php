@@ -48,7 +48,11 @@ class SmtpPostController extends AbstractController
                 'client_ips' => $request->getClientIps(),
             ]);
 
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            if ($e->getCode() >= 400 && $e->getCode() < 600) {
+                $code = $e->getCode();
+            }
+
+            return new JsonResponse(['error' => $e->getMessage()], $code ?? Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return new Response();
